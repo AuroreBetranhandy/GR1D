@@ -108,6 +108,9 @@ M1_phase1_encpl_way	=	1			#0 is none, 1 is explicit energycoupling, 2 is implici
 M1_phase2_encpl_way	=	1			
 M1_phase3_encpl_way	=	1
 
+do_M1_extra_heating	=	0
+M1_heat_fac		=	1.0d0
+
 ####### Neutrino parameters #######
 fake_neutrinos		=	0		# 1 for ANY fake neutrino scheme
 
@@ -119,3 +122,5 @@ atmo_fac		=	0.1d0
 ####### Rotation #######
 do_rotation		=	0	# 1 for 1D rotation
 
+###### Turbulence #######
+do_turbulence           =       0       # 1 for turbulence of Boccioli et al. (2021)
