@@ -72,10 +72,6 @@ subroutine con2prim_1
         low_tol = tol
         ye(i) = q(i,4)/q(i,1)
 
-        if (activate_turbulence) then
-            v_turb(i) = sqrt(q(i,6)/q(i,1))
-        endif
-
         if (q(i,1).eq.0.0d0) then
            v1(i) = 0.0d0
            v(i) = 0.0d0
@@ -215,10 +211,6 @@ subroutine con2prim_1
         err = 1.0d0
         low_tol = tol
         ye(i) = q(i,4)/q(i,1)
-
-        if (activate_turbulence) then
-            v_turb(i) = sqrt(q(i,6)/q(i,1))
-        endif
 
         if (q(i,1).eq.0.0d0) then
            ! D = 0, set everything to zero in this case (can't be good)
@@ -393,9 +385,7 @@ subroutine con2prim_1
       endif
       
       ye(iminb:imaxb) = q(iminb:imaxb,4)/q(iminb:imaxb,1)
-      if (activate_turbulence) then
-         v_turb(iminb:imaxb) = sqrt(q(iminb:imaxb,6)/q(iminb:imaxb,1))
-      endif
+
    endif
    
    ! a few checks
@@ -459,10 +449,6 @@ subroutine con2prim_pt(tol,i,success)
   if (GR) then
      err = 1.0d0
      ye(i) = q(i,4)/q(i,1)
-
-     if (activate_turbulence) then
-        v_turb(i) = sqrt(q(i,6)/q(i,1))
-     endif     
 
      it = 0
      do while (err.gt.tol.and.it.lt.max_iterations)
@@ -584,11 +570,7 @@ subroutine con2prim_pt_rot(tol,i,success)
 
   if (GR) then
      ye(i) = q(i,4)/q(i,1)
-   
-     if (activate_turbulence) then
-        v_turb(i) = sqrt(q(i,6)/q(i,1))
-     endif
-   
+     
      ! general case
      it = 0
      op(i) = press(i)

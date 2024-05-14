@@ -19,7 +19,7 @@
 !
 subroutine nuc_eos_full(xrho,xtemp,xye,xenr,xprs,xent,xcs2,xdedt,&
      xdpderho,xdpdrhoe,xxa,xxh,xxn,xxp,xabar,xzbar,xmu_e,xmu_n,xmu_p, &
-     xmuhat,keytemp,keyerr,rfeps)
+     xmuhat,xmu_mu,xxmu,keytemp,keyerr,rfeps)
 
   use eosmodule
   implicit none
@@ -27,8 +27,8 @@ subroutine nuc_eos_full(xrho,xtemp,xye,xenr,xprs,xent,xcs2,xdedt,&
   real*8, intent(in)    :: xrho,xye
   real*8, intent(inout) :: xtemp,xenr,xent
   real*8, intent(out)   :: xprs,xcs2,xdedt
-  real*8, intent(out)   :: xdpderho,xdpdrhoe,xxa,xxh,xxn,xxp
-  real*8, intent(out)   :: xabar,xzbar,xmu_e,xmu_n,xmu_p,xmuhat
+  real*8, intent(out)   :: xdpderho,xdpdrhoe,xxa,xxh,xxn,xxp,xxmu
+  real*8, intent(out)   :: xabar,xzbar,xmu_e,xmu_n,xmu_p,xmuhat,xmu_mu
   real*8, intent(in)    :: rfeps
   integer, intent(in)   :: keytemp
   integer, intent(out)  :: keyerr
@@ -133,6 +133,12 @@ subroutine nuc_eos_full(xrho,xtemp,xye,xenr,xprs,xent,xcs2,xdedt,&
   xabar = ff(17)
 
   xzbar = ff(18)
+  
+! Muon quantities
+
+  xxmu = ff(20)
+  
+  xmu_mu = ff(21)
 
 
 end subroutine nuc_eos_full

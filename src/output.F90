@@ -77,21 +77,6 @@ subroutine output_all(modeflag)
         endif
      endif
      
-     if (do_turbulence) then
-        filename = trim(adjustl(outdir))//"/omega2_BV.xg"
-        call output_single(omega2_BV*time_gf**2,filename)
-        filename = trim(adjustl(outdir))//"/v_turb.xg"
-        call output_single(v_turb*time_gf/length_gf,filename)
-        filename = trim(adjustl(outdir))//"/dissipated_turb_eps.xg"
-        if (.not. small_output) call output_single(diss*time_gf/eps_gf,filename)
-        filename = trim(adjustl(outdir))//"/buoyancy_turb_eps.xg"
-        if (.not. small_output) call output_single(buoy*time_gf/eps_gf,filename)     
-        filename = trim(adjustl(outdir))//"/shear_turb_eps.xg"
-        if (.not. small_output) call output_single(shear*time_gf/eps_gf,filename)     
-        filename = trim(adjustl(outdir))//"/Lambda_MLT.xg"
-        if (.not. small_output) call output_single(lambda_mlt/length_gf,filename)     
-     endif
-	 
      filename = trim(adjustl(outdir))//"/rho.xg"
      call output_single(rho/rho_gf,filename)
      
@@ -451,7 +436,7 @@ subroutine output_all(modeflag)
            rms_energy(k)     = rms_energy_fluid(k)/sqrt(1.0d0-v(M1_iextractradii)**2)*(1.0d0+v(M1_iextractradii))
            num_luminosity(k) = luminosity(k)/(average_energy(k)*mev_to_erg)
         enddo
-
+!~ 		write(*,*) "lum",luminosity(3),luminosity(4),luminosity(5),luminosity(6)
         total_nu_energy = 0.0d0
         do i=ghosts1+1,M1_imaxradii
            total_nu_energy = total_nu_energy + sum(q_M1(i,1,:,1)*4.0d0*pi*volume(i)/energy_gf) + &
@@ -484,7 +469,7 @@ subroutine output_all(modeflag)
                  tau(i,2) = tau(i+1,2) + (x1i(i+1)-x1i(i))*eas(i,k,j,2)
                  if (nusphere_not_found(k,j,1).and.tau(i,1).gt.0.66666666d0) then
                     nusphere_not_found(k,j,1) = .false.
-                    nusphere(k,j,1) = x1i(i)
+                    nusphere(k,j,1) = x1i(i)	
                  endif
                  if (nusphere_not_found(k,j,2).and.tau(i,2).gt.0.66666666d0) then
                     nusphere_not_found(k,j,2) = .false.
@@ -503,34 +488,54 @@ subroutine output_all(modeflag)
         call output_many_scalars(scalars,nscalars0,nscalars,filename)
 
         scalars(1:nscalars0) = 0.0d0
-        nscalars = 3
+        nscalars = number_species
         scalars(1) = luminosity(1)
         scalars(2) = luminosity(2)
         scalars(3) = luminosity(3)
+        if (number_species .GT. 3) then 
+	        scalars(4) = luminosity(4)
+	        scalars(5) = luminosity(5)
+	        scalars(6) = luminosity(6)
+        endif
         filename = trim(adjustl(outdir))//"/M1_flux_lum.dat"
         call output_many_scalars(scalars,nscalars0,nscalars,filename)
 
         scalars(1:nscalars0) = 0.0d0
-        nscalars = 3
+        nscalars = number_species
         scalars(1) = luminosity_fluid(1)
         scalars(2) = luminosity_fluid(2)
         scalars(3) = luminosity_fluid(3)
+        if (number_species .GT. 3) then 
+	        scalars(4) = luminosity_fluid(4)
+	        scalars(5) = luminosity_fluid(5)
+	        scalars(6) = luminosity_fluid(6)
+	    endif
         filename = trim(adjustl(outdir))//"/M1_flux_lum_fluid.dat"
         call output_many_scalars(scalars,nscalars0,nscalars,filename)
         
         scalars(1:nscalars0) = 0.0d0
-        nscalars = 3
+        nscalars = number_species
         scalars(1) = num_luminosity(1)
         scalars(2) = num_luminosity(2)
         scalars(3) = num_luminosity(3)
+        if (number_species .GT. 3) then 
+	        scalars(4) = num_luminosity(4)
+	        scalars(5) = num_luminosity(5)
+	        scalars(6) = num_luminosity(6)
+	    endif
         filename = trim(adjustl(outdir))//"/M1_flux_numlum.dat"
         call output_many_scalars(scalars,nscalars0,nscalars,filename)
 
         scalars(1:nscalars0) = 0.0d0
-        nscalars = 3
+        nscalars = number_species
         scalars(1) = num_luminosity_fluid(1)
         scalars(2) = num_luminosity_fluid(2)
         scalars(3) = num_luminosity_fluid(3)
+        if (number_species .GT. 3) then 
+	        scalars(5) = num_luminosity_fluid(4)
+	        scalars(5) = num_luminosity_fluid(5)
+	        scalars(6) = num_luminosity_fluid(6)
+	    endif
         filename = trim(adjustl(outdir))//"/M1_flux_numlum_fluid.dat"
         call output_many_scalars(scalars,nscalars0,nscalars,filename)
 
@@ -865,7 +870,7 @@ subroutine output_many_scalars(var,n0,n,filename)
   
   open(unit=666,file=filename,status="unknown",form='formatted',position="append")
   
-  write(666,"(1P256E18.9)") time,var(1:n)
+  write(666,"(1P64E18.9)") time,var(1:n)
   
   close(666)
   

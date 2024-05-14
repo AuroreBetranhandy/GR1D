@@ -145,34 +145,12 @@ module GR1D_module
   real*8 internal_energy
   real*8,allocatable,save :: ToverW(:)
 
-  !turbulence, nomenclature from Couch et al. 2020
-  logical :: do_turbulence = .false. 
-  logical :: activate_turbulence = .false.
-  logical :: read_v_turb = .false. !this is for restart purposes
-  logical :: explosion_reached = .false.
-  real*8 :: alpha_turb, tpb_for_turbulence
-  real*8,allocatable,save :: omega2_BV(:)
-  real*8,allocatable,save :: v_turb(:)
-  
-  real*8,allocatable,save :: diff_term_eps(:)
-  real*8,allocatable,save :: diff_term_ye(:)
-  real*8,allocatable,save :: diff_term_K(:)
-    
-  real*8,allocatable,save :: turb_source(:,:)
-  real*8,allocatable,save :: lambda_mlt(:), shear(:), diss(:), buoy(:)
-  real*8,parameter :: alpha_turb_e = 1.0/6.0
-  real*8,parameter :: alpha_turb_ye = 1.0/6.0
-  real*8,parameter :: alpha_turb_K = 1.0/6.0
-  real*8,parameter :: alpha_turb_nu = 1.0/6.0
-
   !testcases variables
   integer :: shocktube_problem
 
   !M1 scheme stuff
   logical :: do_M1 = .false.
   integer :: M1_prev_phase = 1
-  logical :: do_M1_extra_heating = .false.
-  real*8 :: M1_heat_fac = 1.0d0
 
   integer :: v_order
   real*8 :: M1_maxradii
@@ -184,7 +162,10 @@ module GR1D_module
   integer :: number_groups
   integer :: number_eas
   logical :: include_epannihil_kernels
+  logical :: include_bremsstrahlung_kernels
+  logical :: include_gang_kernels
   logical :: include_nes_kernels
+  logical :: separated_pair_processes
   logical :: include_Ielectron_exp
   logical :: include_Ielectron_imp
   logical :: include_energycoupling_exp
@@ -235,8 +216,7 @@ module GR1D_module
   real*8,allocatable,save :: v(:),vm(:),vp(:)
   real*8,allocatable,save :: v_prev(:)
   real*8,allocatable,save :: vphi(:),vphim(:),vphip(:)
-  ! added for turbulence
-  real*8,allocatable,save :: v_turbp(:),v_turbm(:)
+
   ! #######################################################
 
   ! radial coordinate 
@@ -267,10 +247,11 @@ module GR1D_module
   ! ye 
   real*8,allocatable,save :: ye(:),yem(:),yep(:),ye_prev(:)
   real*8,allocatable,save :: dyedt_hydro(:),dyedt_neutrino(:)
-  real*8,allocatable,save :: depsdt(:),dyedt(:)
-  real*8,allocatable,save :: ynu(:)
+  real*8,allocatable,save :: dymudt_hydro(:),dymudt_neutrino(:)
+  real*8,allocatable,save :: depsdt(:),dyedt(:),dymudt(:)
+  real*8,allocatable,save :: ynu(:),ymu(:),ymu_prev(:)
   !chemical potential
-  real*8,allocatable,save :: nuchem(:),elechem(:)
+  real*8,allocatable,save :: nuchem(:),elechem(:),muchem(:)
   !mass fractions
   real*8,allocatable,save :: massfrac_p(:)
   real*8,allocatable,save :: massfrac_n(:)
@@ -355,6 +336,13 @@ module GR1D_module
   !track of
   !source term
   !from epannihil for
+  !matter
+  real*8,allocatable,save :: bremsstrahlung(:,:,:,:,:) !kernals for  
+  !brem gang zeroth
+  real*8,allocatable,save :: bremsstrahlung_sourceterm(:,:,:,:) !for keeping
+  !track of
+  !source term
+  !from brem for
   !matter
   real*8,allocatable,save :: M1_matter_source(:,:) !source terms
   !for matter
