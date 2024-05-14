@@ -25,21 +25,6 @@ subroutine allocate_vars
   endif
   allocate(ToverW(n1))
 
-  if(do_turbulence) then
-     allocate(omega2_BV(n1))
-     allocate(v_turb(n1))
-     allocate(v_turbp(n1))
-     allocate(v_turbm(n1))
-     allocate(diff_term_eps(n1))     
-     allocate(diff_term_ye(n1))
-     allocate(diff_term_K(n1))
-     allocate(turb_source(n1,n_cons))
-     allocate(lambda_mlt(n1))
-     allocate(shear(n1))
-     allocate(diss(n1))
-     allocate(buoy(n1))
-  endif
-
   allocate(v(n1))
   allocate(vp(n1))
   allocate(vm(n1))
@@ -75,6 +60,7 @@ subroutine allocate_vars
   allocate(entropy(n1))
   allocate(nuchem(n1))
   allocate(elechem(n1))
+  allocate(muchem(n1))
   allocate(massfrac_p(n1))
   allocate(massfrac_n(n1))
   allocate(massfrac_h(n1))
@@ -88,6 +74,8 @@ subroutine allocate_vars
   allocate(yep(n1))
   allocate(yem(n1))
   allocate(ynu(n1))
+  allocate(ymu(n1),ymu_prev(n1))
+  allocate(dymudt_hydro(n1),dymudt_neutrino(n1),dymudt(n1))
 
   allocate(q(n1,n_cons))
   allocate(qold(n1,n_cons))
@@ -101,8 +89,9 @@ subroutine allocate_vars
   allocate(eas(n1,number_species,number_groups,number_eas)) !emissivity,absorpive crosssection, scattering crosssection
   allocate(ies(n1,number_species,number_groups,number_groups,2)) ! scattering kernel \phis
   allocate(ies_sourceterm(n1,number_species,number_groups,2)) !source terms for matter
-  allocate(epannihil(n1,number_species,number_groups,number_groups,4)) ! scattering kernel \phis
+  allocate(epannihil(n1,number_species,number_groups,number_groups,4)) ! epan kernel \phis
   allocate(epannihil_sourceterm(n1,number_species,number_groups,2)) !source terms for matter
+  allocate(bremsstrahlung(n1,number_species,number_groups,number_groups,2)) ! brem kernel \phi 
   allocate(q_M1(n1,number_species,number_groups,3)) !conserved variables
   allocate(q_M1_prev(n1,number_species,number_groups,3)) !conserved variables
   allocate(q_M1p(n1,number_species,number_groups,3,2)) !conserved variables
@@ -118,7 +107,7 @@ subroutine allocate_vars
   allocate(flux_M1_energy(n1,number_species,number_groups,3)) !conserved variables
   allocate(flux_M1_scatter(n1,number_species,number_groups,3)) !conserved variables
   allocate(q_M1_fluid(n1,number_species,number_groups,3)) !neutrino variables in the fluid frame
-  allocate(M1_matter_source(n1,4)) !matter source terms
+  allocate(M1_matter_source(n1,5)) !matter source terms
   allocate(M1_moment_to_distro(number_groups))
   allocate(M1_moment_to_distro_inverse(number_groups))
 

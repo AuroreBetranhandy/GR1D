@@ -50,15 +50,17 @@ subroutine initialize_vars
   number_groups = 0
   number_eas = 0
   include_epannihil_kernels = .false.
+  include_bremsstrahlung_kernels = .false.
+  include_gang_kernels = .false.
   include_nes_kernels = .false.
   include_Ielectron_exp = .false.
   include_Ielectron_imp = .false.
+  separated_pair_processes = .false.
   include_energycoupling_exp = .false.
   include_energycoupling_imp = .false.
   opacity_table = ""
   M1closure = 'ME'
   M1_testcase_number = 0
-  totalmass = 0.0d0
   total_energy_radiated = 0.0d0
   total_energy_absorped = 0.0d0
   total_net_heating = 0.0d0
@@ -84,7 +86,7 @@ subroutine initialize_vars
   ToverW(:) = 0.0d0
 
   eoskey = 0
- 
+  
   initial_data = " "
 
   geometry = 0
@@ -163,7 +165,12 @@ subroutine initialize_arrays
   yem(:) = 0.0d0
   
   ynu(:) = 0.0d0
-
+  
+  ymu(:) = 0.0d0
+  ymu_prev(:) = 0.0d0
+  dymudt_hydro(:) = 0.0d0
+  dymudt_neutrino(:) = 0.0d0
+  
   v1(:) = 0.0d0
   v1p(:) = 0.0d0
   v1m(:) = 0.00d0
@@ -178,21 +185,6 @@ subroutine initialize_arrays
      omega(:) = 0.0d0
   endif
 
-  if(do_turbulence) then
-     omega2_BV(:) = 0.0d0
-     v_turb(:) = 0.0d0
-     v_turbp(:) = 0.0d0
-     v_turbm(:) = 0.0d0
-     diff_term_eps(:) = 0.0d0
-     diff_term_ye(:) = 0.0d0
-     diff_term_K(:) = 0.0d0        
-     turb_source(:,:) = 0.0d0
-     lambda_mlt(:) = 0.0d0
-     shear(:) = 0.0d0
-     diss(:) = 0.0d0
-     buoy(:) = 0.0d0
-  endif
-  
   v(:) = 0.0d0
   vp(:) = 0.0d0
   vm(:) = 0.0d0
@@ -220,7 +212,7 @@ subroutine initialize_arrays
   q_M1_extrap(:,:,:,:,:) = 0.0d0
   q_M1_extram(:,:,:,:,:) = 0.0d0
   q_M1_fluid(:,:,:,1) = 1.0d-90
-  q_M1_fluid(:,:,:,2) = 1.0d-110
+  q_M1_fluid(:,:,:,2) = 1.0d-100
   M1_matter_source(:,:) = 0.0d0
   M1_moment_to_distro(:) = 0.0d0
   M1_moment_to_distro_inverse(:) = 0.0d0
@@ -239,6 +231,7 @@ subroutine initialize_arrays
   ies_sourceterm(:,:,:,:) = 0.0d0
   epannihil(:,:,:,:,:) = 0.0d0
   epannihil_sourceterm(:,:,:,:) = 0.0d0
+  bremsstrahlung(:,:,:,:,:) = 0.0d0  
   q_M1(:,:,:,1) = 1.0d-100
   q_M1(:,:,:,2) = 1.0d-110
   q_M1(:,:,:,3) = 0.5

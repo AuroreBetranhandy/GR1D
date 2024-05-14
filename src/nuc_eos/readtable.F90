@@ -179,6 +179,16 @@ subroutine readtable(eos_filename)
   call h5dread_f(dset_id, H5T_NATIVE_DOUBLE, alltables(:,:,:,19), dims3, error)
   call h5dclose_f(dset_id,error)
   accerr=accerr+error
+  
+ !Muon quantities
+  call h5dopen_f(file_id, "Y_mu", dset_id, error)
+  call h5dread_f(dset_id, H5T_NATIVE_DOUBLE, alltables(:,:,:,20), dims3, error)
+  call h5dclose_f(dset_id,error)
+  accerr=accerr+error
+  call h5dopen_f(file_id, "mu_mu", dset_id, error)
+  call h5dread_f(dset_id, H5T_NATIVE_DOUBLE, alltables(:,:,:,21), dims3, error)
+  call h5dclose_f(dset_id,error)
+  accerr=accerr+error
 
   allocate(logrho(nrho))
   dims1(1)=nrho
