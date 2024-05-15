@@ -16,3 +16,5 @@ GR1D's Neutrino Transport: O'Connor, E. P. 2015 ApJS 219 24 https://iopscience.i
   LS220_234r_136t_50y_analmu_20091212_SVNr26.h5: https://su.drive.sunet.se/index.php/s/a59qc6EQWeDWpMY
   LS180_234r_136t_50y_analmu_20091212_SVNr26.h5: https://su.drive.sunet.se/index.php/s/MZaZwBBk7FGBAqm
   (other tables at https://ttt.astro.su.se/~eoco/eos.html)
+
+  See how to use here: https://framindmap.org/c/maps/1448219/public
