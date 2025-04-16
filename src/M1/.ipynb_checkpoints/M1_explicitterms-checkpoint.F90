@@ -756,8 +756,11 @@ subroutine M1_explicitterms(dts,implicit_factor)
 
            if (i.eq.3.and.number_species.eq.3) then
               species_factor = 4.0d0
-           else if (i.eq.3) then
-              stop "add in correct species terms"
+           else if (i.ge.3 .and. number_species.gt.5) then
+              species_factor=1.0d0
+            else if (i.eq.5 .and. number_species.eq.5) then 
+              species_factor=2.0d0
+              !stop "add in correct species terms"
            else
               species_factor = 1.0d0
            endif

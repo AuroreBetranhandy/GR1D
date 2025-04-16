@@ -65,7 +65,7 @@ subroutine M1_updateeas
                    singlespecies_tempspectrum,number_groups,number_eas)
               tempspectrum(1,:,:) = singlespecies_tempspectrum(:,:)
            else if (number_species_to_evolve.GE.3) then
-               write(*,*) number_species
+               !write(*,*) number_species
               call nulibtable_range_species_range_energy(xrho,xtemp,xye,tempspectrum, &
                    number_species,number_groups,number_eas)
            else

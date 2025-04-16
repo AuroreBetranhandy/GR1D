@@ -383,8 +383,9 @@ subroutine M1_implicitstep(dts,implicit_factor)
               if (i.eq.3.and.number_species.eq.3) then
                  species_factor = 4.0d0
                  ispecies_factor = 0.25
-              else if (i.eq.3) then
-                 stop "add in proper i>3 species support for thermal process"
+              !else if (i.eq.3) then
+                 
+                 !stop "add in proper i>3 species support for thermal process"
               else
                  species_factor = 1.0d0
                  ispecies_factor = 1.0d0
@@ -406,8 +407,33 @@ subroutine M1_implicitstep(dts,implicit_factor)
                  Ebar(:) = NLsolve_x(1:number_groups) !nux at time (n)
                  Fbar(:) =  NLsolve_x(number_groups+1:2*number_groups)!nux at time (n)
                  eddybar(:) = q_M1(k,i,:,3) !nux at time (n)
-              else
-                 stop "add in i>3 species support for thermal processes"
+              else if (i.eq.3.and.number_species.gt.3) then
+                 Ebar(:) = q_M1_old(k,3,:,1) !nue at time (n+1), because order of species loop  !!! no
+                 Fbar(:) = q_M1_old(k,3,:,2) !nue at time (n+1), because order of species loop
+                 eddybar(:) = q_M1_old(k,3,:,3) !nue at time (n+1), because order of species loop
+!~                  write(*,*) "anue",dts
+              else if (i.eq.4.and.number_species.gt.3) then
+                 Ebar(:) = q_M1_old(k,4,:,1) !nue at time (n+1), because order of species loop  !!! no
+                 Fbar(:) = q_M1_old(k,4,:,2) !nue at time (n+1), because order of species loop
+                 eddybar(:) = q_M1_old(k,4,:,3) !nue at time (n+1), because order of species loop
+!~                  write(*,*) "anue",dts
+              else if (i.eq.5.and.number_species.gt.5) then
+                 Ebar(:) = q_M1_old(k,5,:,1) !nue at time (n+1), because order of species loop  !!! no
+                 Fbar(:) = q_M1_old(k,5,:,2) !nue at time (n+1), because order of species loop
+                 eddybar(:) = q_M1_old(k,5,:,3) !nue at time (n+1), because order of species loop
+
+              else if (i.eq.6.and.number_species.gt.5) then
+                 Ebar(:) = q_M1_old(k,6,:,1) !nue at time (n+1), because order of species loop  !!! no
+                 Fbar(:) = q_M1_old(k,6,:,2) !nue at time (n+1), because order of species loop
+                 eddybar(:) = q_M1_old(k,6,:,3) !nue at time (n+1), because order of species loop
+!~                  write(*,*) "anue",dts
+              else if (i.eq.5.and.number_species.eq.5) then
+                 Ebar(:) = NLsolve_x(1:number_groups) !nux at time (n)
+                 Fbar(:) =  NLsolve_x(number_groups+1:2*number_groups)!nux at time (n)
+                 eddybar(:) = q_M1(k,i,:,3) !nux at time (n)
+              else 
+                 stop 'Something is off with neutrino species number in implicitstep'
+                 !stop "add in i>3 species support for thermal processes"
               endif
 
               !linearize the block terms
